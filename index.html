@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jun Cheng — Graphic & Interactive Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- Cursor glow -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- NAV -->
+  <header class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">JC<span class="dot">.</span></a>
+      <nav class="nav-links" id="navLinks" aria-label="Primary navigation">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-bg-grid"></div>
+      <div class="hero-orb orb-1"></div>
+      <div class="hero-orb orb-2"></div>
+      <div class="hero-content">
+        <p class="hero-eyebrow fade-up">Graphic Design &amp; Interactive Media</p>
+        <h1 class="hero-name fade-up delay-1">Jun<br /><em>Cheng</em></h1>
+        <p class="hero-tagline fade-up delay-2">Designer. Animator. Creative Thinker.</p>
+        <div class="hero-cta fade-up delay-3">
+          <a href="#work" class="btn-primary">View My Work</a>
+          <a href="#contact" class="btn-ghost">Get In Touch</a>
+        </div>
+      </div>
+      <div class="hero-scroll-hint fade-up delay-4">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about section" id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-image-wrap reveal">
+            <div class="about-img-frame">
+              <img src="assets/images/me.png" alt="Photo of Jun Cheng" class="about-img" />
+              <div class="about-img-badge">
+                <span>Open to</span>
+                <strong>Work</strong>
+              </div>
+            </div>
+          </div>
+          <div class="about-text reveal delay-1">
+            <p class="section-label">About Me</p>
+            <h2 class="section-heading">Hello, I'm June</h2>
+            <p class="about-bio">I have been a Graphic Designer for many years, mainly in traditional print media. And while I still love that work, now is the digital age and, as such, I have begun to explore the world of interactive media.</p>
+            <p class="about-bio">I have strengthened my web and interactive skills and now offer more flexible design opportunities. My background in print, combined with new digital skills, lets me bring a holistic framework to every project — spanning graphic design, UX/UI design, and motion design.</p>
+            <p class="about-bio">Outside of work I enjoy drawing, reading, crafts, playing badminton, and spending time with my family.</p>
+            <div class="about-stats">
+              <div class="stat">
+                <strong>10+</strong>
+                <span>Years Design</span>
+              </div>
+              <div class="stat">
+                <strong>3</strong>
+                <span>Disciplines</span>
+              </div>
+              <div class="stat">
+                <strong>∞</strong>
+                <span>Creative Drive</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section class="work section" id="work">
+      <div class="container">
+        <div class="section-header reveal">
+          <p class="section-label">Selected Work</p>
+          <h2 class="section-heading">Projects I'm Proud Of</h2>
+        </div>
+        <div class="projects-grid stagger-grid">
+
+          <!-- Project 1 — Kunming 2024 (full-width featured card) -->
+          <article class="project-card card-large reveal">
+            <div class="card-img-wrap">
+              <img src="assets/images/burger_munch Creative Deck_Page_1.jpg" alt="burger_munch Creative Deck" class="card-img" />
+              <div class="card-overlay">
+                <div class="overlay-content">
+                  <span class="overlay-tag">Brand Creative</span>
+                  <p class="overlay-desc">Burger_Munch</p>
+                  <span class="overlay-cta">View Project ↗</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">Brand Creative</span>
+              <h3>Burger_Munch</h3>
+              <p class="card-desc">Unboxing Experience Concept</p>
+            </div>
+          </article>
+
+          <!-- Project 2 — Twenty-Four Solar Terms (two images, shown as first) -->
+          <article class="project-card reveal delay-1">
+            <div class="card-img-wrap">
+              <img src="assets/images/KunmingCover.jpg" alt="Twenty-Four Solar Terms — Spring" class="card-img" />
+              <div class="card-overlay">
+                <div class="overlay-content">
+                  <span class="overlay-tag">Illustration</span>
+                  <p class="overlay-desc">Commissioned illustration work for Kunming 2024, an annual city publication.</p>
+                  <span class="overlay-cta">View Project ↗</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">Illustration</span>
+              <h3>Illustrations for Kunming 2024</h3>
+              <p class="card-desc">Commissioned illustration series for an annual city publication.</p>
+            </div>
+          </article>
+
+          <!-- Project 2b — Snow (second image from the same series) -->
+          <article class="project-card reveal delay-2">
+            <div class="card-img-wrap">
+              <img src="assets/images/Logo_BeHance.png" alt="Twenty-Four Solar Terms — Snow" class="card-img" />
+              <div class="card-overlay">
+                <div class="overlay-content">
+                  <span class="overlay-tag">Brand Guidlines</span>
+                  <p class="overlay-desc">MOOD coffee</p>
+                  <span class="overlay-cta">View Project ↗</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">Brand Guidlines</span>
+              <h3>MOOD coffee</h3>
+              <p class="card-desc">MOOD coffee Brand Guidlines. MOOD is a conceptual specialty coffee brand centered around emotion, atmosphere, and everyday rituals.</p>
+            </div>
+          </article>
+
+          <!-- Project 3 — Placeholder -->
+          <article class="project-card reveal delay-1">
+            <div class="card-img-wrap">
+              <img src="assets/images/Spring.jpg" alt="Project 3 — coming soon" class="card-img" />
+              <div class="card-overlay">
+                <div class="overlay-content">
+                  <span class="overlay-tag">Print / Illustration</span>
+                  <p class="overlay-desc">Twenty-Four Solar Terms</p>
+                  <span class="overlay-cta">View Project ↗</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">Print / Illustration</span>
+              <h3>Twenty-Four Solar Terms</h3>
+              <p class="card-desc">A printmaking illustration series inspired by the traditional Chinese Twenty-Four Solar Terms. hand-printed</p>
+            </div>
+          </article>
+
+          <!-- Project 4 — Placeholder -->
+          <article class="project-card reveal delay-2">
+            <div class="card-img-wrap">
+              <img src="assets/images/poster.jpg" alt="Project 4 — coming soon" class="card-img" />
+              <div class="card-overlay">
+                <div class="overlay-content">
+                  <span class="overlay-tag">Poster / Magazine</span>
+                  <p class="overlay-desc">U Magazine - Holiday Special Issue</p>
+                  <span class="overlay-cta">View Project ↗</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">Poster / Magazine</span>
+              <h3>U magazine</h3>
+              <p class="card-desc">U Magazine - Holiday Special Issue</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="skills section" id="skills">
+      <div class="container">
+        <div class="section-header reveal" style="text-align:center;">
+          <p class="section-label">Toolbox</p>
+          <h2 class="section-heading">Tools & Skills</h2>
+          <p class="skills-intro">The software and disciplines I work with every day.</p>
+        </div>
+
+        <div class="skills-categories">
+
+          <div class="skill-group reveal delay-1">
+            <p class="skill-group-label">Graphic Design</p>
+            <div class="skills-row">
+              <div class="skill-tag">
+                <svg class="skill-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12,2 22,20 2,20"/></svg>
+                Illustrator
+              </div>
+              <div class="skill-tag">
+                <svg class="skill-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>
+                Photoshop
+              </div>
+              <div class="skill-tag">
+                <svg class="skill-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                InDesign
+              </div>
+              <div class="skill-tag">
+                <svg class="skill-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 6h20v2H2zm0 5h20v2H2zm0 5h14v2H2z"/></svg>
+                Print Media
+              </div>
+            </div>
+          </div>
+
+          <div class="skill-group reveal delay-2">
+            <p class="skill-group-label">UX / UI Design</p>
+            <div class="skills-row">
+              <div class="skill-tag">
+                <svg class="skill-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.5a4.5 4.5 0 0 0-4.5 4.5c0 1.33.58 2.53 1.5 3.37V12a3 3 0 0 0 3 3 3 3 0 0 0 3-3v-.63A4.48 4.48 0 0 0 16.5 8 4.5 4.5 0 0 0 12 3.5zm0 7a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                Figma
+              </div>
+              <div class="skill-tag">
+                <svg class="skill-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3l16 9-16 9V3z"/></svg>
+                HTML / CSS
+              </div>
+              <div class="skill-tag">
+                <svg class="skill-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H7l5-8v4h4l-5 8z"/></svg>
+                Interaction Design
+              </div>
+            </div>
+          </div>
+
+          <div class="skill-group reveal delay-3">
+            <p class="skill-group-label">Motion Design</p>
+            <div class="skills-row">
+              <div class="skill-tag">
+                <svg class="skill-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                After Effects
+              </div>
+              <div class="skill-tag">
+                <svg class="skill-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 4h20v2H2zm0 7h20v2H2zm0 7h20v2H2z"/></svg>
+                Premiere Pro
+              </div>
+              <div class="skill-tag skill-tag--outline">
+                + Always learning
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact section" id="contact">
+      <div class="container">
+        <div class="contact-inner reveal">
+          <p class="section-label">Say Hello</p>
+          <h2 class="contact-heading">Let's <em>Connect</em></h2>
+          <p class="contact-sub">I'm open to freelance work, collaborations, and new opportunities — let's make something great together.</p>
+          <a href="mailto:ccjuneee@gmail.com" class="btn-primary btn-large">ccjuneee@gmail.com</a>
+          <div class="social-links">
+            <a href="https://www.behance.net/Juneee" class="social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.202.73 1.662 1.816 1.662.908 0 1.445-.557 1.644-1.282l2.296.676zm-7.193-3.959h3.183c-.041-1.082-.545-1.683-1.57-1.683-1.024 0-1.515.618-1.613 1.683zm-12.404 0H8.19c1.012 0 1.554-.484 1.554-1.402 0-.928-.542-1.415-1.554-1.415H4.129v2.817zm.01 3.99h4.365c1.038 0 1.654-.523 1.654-1.509 0-.981-.616-1.48-1.654-1.48H4.139v2.989zM0 5h6.386c2.393 0 4.044 1.33 4.044 3.634C10.43 9.9 9.974 10.8 9.162 11.4c1.23.512 1.952 1.611 1.952 3.134 0 2.49-1.803 4.016-4.488 4.016H0V5z"/></svg>
+              Behance
+            </a>
+            <a href="https://www.linkedin.com/in/june-cc-b870743b5/" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              LinkedIn
+            </a>
+            <a href="#" class="social-link" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              Instagram
+            </a>
+            <a href="mailto:ccjuneee@gmail.com" class="social-link" aria-label="Email">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              Email
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span class="nav-logo">JC<span class="dot">.</span></span>
+      <p class="footer-copy">© 2026 Jun Cheng. Built with AI.</p>
+      <a href="#hero" class="footer-back" aria-label="Back to top">↑ Top</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
