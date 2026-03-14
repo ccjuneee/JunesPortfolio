@@ -8,25 +8,56 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
+  <!-- Anti-flash: apply saved theme before first paint -->
+  <script>
+    (function() {
+      var t = localStorage.getItem('jc-portfolio-theme');
+      if (t) document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
 </head>
 <body>
 
-  <!-- Cursor glow -->
+  <!-- Custom cursor: dot (snappy) + ring (lagged) + ambient glow -->
+  <div class="cursor-dot"  id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
   <div class="cursor-glow" id="cursorGlow"></div>
 
   <!-- NAV -->
   <header class="navbar" id="navbar">
     <div class="nav-inner">
-      <a href="#" class="nav-logo">JC<span class="dot">.</span></a>
+      <a href="#" class="nav-logo">
+  <img src="assets/images/Logo_Light.png" alt="Jun Cheng" class="nav-logo__img" />
+</a>
       <nav class="nav-links" id="navLinks" aria-label="Primary navigation">
         <a href="#about">About</a>
         <a href="#work">Work</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
       </nav>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="nav-controls">
+        <button class="theme-toggle" id="themeToggle" aria-label="Switch to light mode">
+          <!-- Moon icon (shown in dark mode) -->
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <!-- Sun icon (shown in light mode) -->
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1"  x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22"  x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1"  y1="12" x2="3"  y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"/>
+          </svg>
+        </button>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -39,7 +70,7 @@
       <div class="hero-orb orb-2"></div>
       <div class="hero-content">
         <p class="hero-eyebrow fade-up">Graphic Design &amp; Interactive Media</p>
-        <h1 class="hero-name fade-up delay-1">Jun<br /><em>Cheng</em></h1>
+        <h1 class="hero-name fade-up delay-1">Hello<br /><em>I'm June</em></h1>
         <p class="hero-tagline fade-up delay-2">Designer. Animator. Creative Thinker.</p>
         <div class="hero-cta fade-up delay-3">
           <a href="#work" class="btn-primary">View My Work</a>
@@ -74,7 +105,7 @@
             <div class="about-stats">
               <div class="stat">
                 <strong>10+</strong>
-                <span>Years Design</span>
+                <span>Years Experience</span>
               </div>
               <div class="stat">
                 <strong>3</strong>
@@ -99,14 +130,16 @@
         </div>
         <div class="projects-grid stagger-grid">
 
-          <!-- Project 1 — Kunming 2024 (full-width featured card) -->
-          <article class="project-card card-large reveal">
+          <!-- Project 1 — Burger_Munch (full-width featured card) -->
+          <article class="project-card card-large reveal"
+            data-modal-imgs="assets/images/burger_munch Creative Deck_Page_1.jpg|assets/images/burger_munch Creative Deck_Page_2.jpg|assets/images/burger_munch Creative Deck_Page_3.jpg|assets/images/burger_munch Creative Deck_Page_4.jpg|assets/images/burger_munch Creative Deck_Page_5.jpg|assets/images/burger_munch Creative Deck_Page_6.jpg|assets/images/burger_munch Creative Deck_Page_7.jpg|assets/images/burger_munch Creative Deck_Page_8.jpg"
+            data-modal-tag="Brand Creative"
+            data-modal-title="Burger_Munch"
+            data-modal-desc="Burger_Munch is a conceptual food branding project that reimagines a burger meal as a blind-box unboxing experience. Inspired by tech product launches and unboxing culture, the project transforms everyday eating into a moment of anticipation, reveal, and joy. Through cinematic visuals, packaging concepts, and sensory storytelling, Burger_Munch turns a simple burger into an experience designed to surprise, engage, and delight. ">
             <div class="card-img-wrap">
-              <img src="assets/images/burger_munch Creative Deck_Page_1.jpg" alt="burger_munch Creative Deck" class="card-img" />
+              <img src="assets/images/burger_munch Creative Deck_Page_1.jpg" alt="Illustrations for Kunming 2024 — cover artwork" class="card-img" />
               <div class="card-overlay">
                 <div class="overlay-content">
-                  <span class="overlay-tag">Brand Creative</span>
-                  <p class="overlay-desc">Burger_Munch</p>
                   <span class="overlay-cta">View Project ↗</span>
                 </div>
               </div>
@@ -118,14 +151,16 @@
             </div>
           </article>
 
-          <!-- Project 2 — Twenty-Four Solar Terms (two images, shown as first) -->
-          <article class="project-card reveal delay-1">
+          <!-- Project 2 — Illustration -->
+          <article class="project-card reveal delay-1"
+            data-modal-imgs="assets/images/KunmingFlower2023版跨P30.jpg|assets/images/KunmingFlower2023版跨P28.jpg|assets/images/KunmingFlower2023版跨P26.jpg|assets/images/kunming2023花信风拉页.jpg"
+            data-modal-tag="Illustration"
+            data-modal-title="Twenty-Four Solar Terms — Spring"
+            data-modal-desc="A printmaking illustration series inspired by the traditional Chinese Twenty-Four Solar Terms. Using hand-printed textures and bold seasonal imagery, each piece interprets a moment of nature, climate, and rhythm through contemporary visual language. This piece, Spring, evokes renewal and warmth — the world waking up after winter's stillness. The project explores time, seasonality, and everyday poetry rooted in Chinese culture.">
             <div class="card-img-wrap">
-              <img src="assets/images/KunmingCover.jpg" alt="Twenty-Four Solar Terms — Spring" class="card-img" />
+              <img src="assets/images/kunming2023花信风拉页.jpg" alt="Twenty-Four Solar Terms — Spring" class="card-img" />
               <div class="card-overlay">
                 <div class="overlay-content">
-                  <span class="overlay-tag">Illustration</span>
-                  <p class="overlay-desc">Commissioned illustration work for Kunming 2024, an annual city publication.</p>
                   <span class="overlay-cta">View Project ↗</span>
                 </div>
               </div>
@@ -137,14 +172,16 @@
             </div>
           </article>
 
-          <!-- Project 2b — Snow (second image from the same series) -->
-          <article class="project-card reveal delay-2">
+          <!-- Project 3 — Snow -->
+          <article class="project-card reveal delay-2"
+            data-modal-imgs="assets/images/Logo_BeHance.png|assets/images/Brand Guidelines MOOD_Page_1.jpg|assets/images/Brand Guidelines MOOD_Page_2.jpg|assets/images/Brand Guidelines MOOD_Page_3.jpg|assets/images/Brand Guidelines MOOD_Page_4.jpg|assets/images/Brand Guidelines MOOD_Page_5.jpg|assets/images/Brand Guidelines MOOD_Page_6.jpg|assets/images/Brand Guidelines MOOD_Page_7.jpg|assets/images/Brand Guidelines MOOD_Page_8.jpg|assets/images/Brand Guidelines MOOD_Page_9.jpg"
+            data-modal-tag="Brand Guidlines"
+            data-modal-title="Twenty-Four Solar Terms — Snow"
+            data-modal-desc="From the same Twenty-Four Solar Terms series, this piece explores the quiet and stillness of the winter snow solar term. Hand-printed textures give the surface a physical, layered quality — the marks of the printing process become part of the visual language. Bold seasonal imagery is balanced with negative space, letting silence speak as loudly as form.">
             <div class="card-img-wrap">
-              <img src="assets/images/Logo_BeHance.png" alt="Twenty-Four Solar Terms — Snow" class="card-img" />
+              <img src="assets/images/Logo_BeHance.png" alt="Mood Logo" class="card-img" />
               <div class="card-overlay">
                 <div class="overlay-content">
-                  <span class="overlay-tag">Brand Guidlines</span>
-                  <p class="overlay-desc">MOOD coffee</p>
                   <span class="overlay-cta">View Project ↗</span>
                 </div>
               </div>
@@ -156,14 +193,37 @@
             </div>
           </article>
 
-          <!-- Project 3 — Placeholder -->
-          <article class="project-card reveal delay-1">
+          <!-- Project 4 — Toyota “Fang” Series Mobile App -->
+          <article class="project-card reveal delay-1"
+            data-modal-imgs="assets/images/Toyota2.png|assets/images/Toyota3.png"
+            data-modal-tag="UX/UI Design · Mobile App · Automotive · Brand Experience"
+            data-modal-title="Toyota “Fang” Series Mobile App"
+            data-modal-desc="Designed a mobile application for Toyota’s “Fang” series vehicles, focusing on enhancing the digital user experience for car owners. The app provides vehicle information, brand updates, and service access through a clear and intuitive interface, strengthening the connection between users and the brand ecosystem.">
+            <div class="card-img-wrap">
+              <img src="assets/images/Toyota1.png" alt="Project 3 — coming soon" class="card-img" />
+              <div class="card-overlay">
+                <div class="overlay-content">
+                  <span class="overlay-cta">View Project ↗</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">UX/UI Design · Mobile App · Automotive · Brand Experience</span>
+              <h3>Toyota (China)</h3>
+              <p class="card-desc">Toyota “Fang” Series Mobile App</p>
+            </div>
+          </article>
+
+          <!-- Project 4 — Twenty-Four Solar Terms -->
+          <article class="project-card reveal delay-1"
+            data-modal-imgs="assets/images/24SolarTerms.png"
+            data-modal-tag="Print / Illustration"
+            data-modal-title="Twenty-Four Solar Terms"
+            data-modal-desc="Replace this card with your next project. Update the data-modal-* attributes on the article element with your real image path, title, and description. Add your image to assets/images/ and you're done.">
             <div class="card-img-wrap">
               <img src="assets/images/Spring.jpg" alt="Project 3 — coming soon" class="card-img" />
               <div class="card-overlay">
                 <div class="overlay-content">
-                  <span class="overlay-tag">Print / Illustration</span>
-                  <p class="overlay-desc">Twenty-Four Solar Terms</p>
                   <span class="overlay-cta">View Project ↗</span>
                 </div>
               </div>
@@ -175,22 +235,66 @@
             </div>
           </article>
 
-          <!-- Project 4 — Placeholder -->
-          <article class="project-card reveal delay-2">
+          <!-- Project 5 — Umagazine -->
+          <article class="project-card reveal delay-2"
+            data-modal-imgs="assets/images/U-fes-sticker1.png|assets/images/U-fes-sticker2.png|assets/images/U-fes-sticker3.png|assets/images/U-fes-sticker4.png|assets/images/poster.jpg|assets/images/"
+            data-modal-tag="Poster / Icon / Magazine"
+            data-modal-title="U Magazine - Holiday Special Issue"
+            data-modal-desc="U Magazine - Holiday Special Issue">
             <div class="card-img-wrap">
-              <img src="assets/images/poster.jpg" alt="Project 4 — coming soon" class="card-img" />
+              <img src="assets/images/Ufestival.jpg" alt="Project 4 — Umagazine" class="card-img" />
               <div class="card-overlay">
                 <div class="overlay-content">
-                  <span class="overlay-tag">Poster / Magazine</span>
-                  <p class="overlay-desc">U Magazine - Holiday Special Issue</p>
                   <span class="overlay-cta">View Project ↗</span>
                 </div>
               </div>
             </div>
             <div class="card-info">
-              <span class="card-tag">Poster / Magazine</span>
+              <span class="card-tag">Poster / Icon / Magazine</span>
               <h3>U magazine</h3>
               <p class="card-desc">U Magazine - Holiday Special Issue</p>
+            </div>
+          </article>
+
+          <!-- Project 6 — Kunmingmagazine2023 -->
+          <article class="project-card reveal delay-2"
+            data-modal-imgs="assets/images/Kunming2023.mp4"
+            data-modal-tag="Layout / Magazine"
+            data-modal-title="Kun Ming 2023"
+            data-modal-desc="Replace this card with your next project. Update the data-modal-* attributes on the article element with your real image path, title, and description. Add your image to assets/images/ and you're done.">
+            <div class="card-img-wrap">
+              <img src="assets/images/KunmingCover.jpg" alt="Project 5 — Kunmingmagazine2023" class="card-img" />
+              <div class="card-overlay">
+                <div class="overlay-content">
+                  <span class="overlay-cta">View Project ↗</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">Layout / Magazine</span>
+              <h3>Kun Ming 2023</h3>
+              <p class="card-desc">Kun Ming 2023</p>
+            </div>
+          </article>
+
+          <!-- Project 7 — 24Bloomes -->
+          <article class="project-card reveal delay-2"
+            data-modal-imgs="assets/images/24Bloomes.png"
+            data-modal-tag="Icon / Tranditional"
+            data-modal-title="24Bloomes"
+            data-modal-desc="The traditional Chinese Twenty-Four Solar Terms">
+            <div class="card-img-wrap">
+              <img src="assets/images/24Bloomes.png" alt="Project 5 — Kunmingmagazine2023" class="card-img" />
+              <div class="card-overlay">
+                <div class="overlay-content">
+                  <span class="overlay-cta">View Project ↗</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">Icon / Tranditional</span>
+              <h3>24Bloomes</h3>
+              <p class="card-desc">The traditional Chinese Twenty-Four Solar Terms</p>
             </div>
           </article>
 
@@ -277,7 +381,7 @@
           <p class="section-label">Say Hello</p>
           <h2 class="contact-heading">Let's <em>Connect</em></h2>
           <p class="contact-sub">I'm open to freelance work, collaborations, and new opportunities — let's make something great together.</p>
-          <a href="mailto:ccjuneee@gmail.com" class="btn-primary btn-large">ccjuneee@gmail.com</a>
+          <a href="/cdn-cgi/l/email-protection#d1b2b2bba4bfb4b4b491b6bcb0b8bdffb2bebc" class="btn-primary btn-large"><span class="__cf_email__" data-cfemail="c6a5a5acb3a8a3a3a386a1aba7afaae8a5a9ab">[email&#160;protected]</span></a>
           <div class="social-links">
             <a href="https://www.behance.net/Juneee" class="social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.202.73 1.662 1.816 1.662.908 0 1.445-.557 1.644-1.282l2.296.676zm-7.193-3.959h3.183c-.041-1.082-.545-1.683-1.57-1.683-1.024 0-1.515.618-1.613 1.683zm-12.404 0H8.19c1.012 0 1.554-.484 1.554-1.402 0-.928-.542-1.415-1.554-1.415H4.129v2.817zm.01 3.99h4.365c1.038 0 1.654-.523 1.654-1.509 0-.981-.616-1.48-1.654-1.48H4.139v2.989zM0 5h6.386c2.393 0 4.044 1.33 4.044 3.634C10.43 9.9 9.974 10.8 9.162 11.4c1.23.512 1.952 1.611 1.952 3.134 0 2.49-1.803 4.016-4.488 4.016H0V5z"/></svg>
@@ -291,7 +395,7 @@
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
               Instagram
             </a>
-            <a href="mailto:ccjuneee@gmail.com" class="social-link" aria-label="Email">
+            <a href="/cdn-cgi/l/email-protection#a0c3c3cad5cec5c5c5e0c7cdc1c9cc8ec3cfcd" class="social-link" aria-label="Email">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
               Email
             </a>
@@ -302,14 +406,56 @@
 
   </main>
 
+  </main>
+
   <!-- FOOTER -->
   <footer class="footer">
     <div class="container footer-inner">
-      <span class="nav-logo">JC<span class="dot">.</span></span>
+      <span class="nav-logo">
+  <img src="assets/images/Logo_Light.png" alt="Jun Cheng" class="nav-logo__img" />
+</span>
       <p class="footer-copy">© 2026 Jun Cheng. Built with AI.</p>
       <a href="#hero" class="footer-back" aria-label="Back to top">↑ Top</a>
     </div>
   </footer>
+
+  <!-- PROJECT MODAL -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+  <div class="modal-panel">
+    <button class="modal-close" id="modalClose" aria-label="Close project">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="18" y1="6"  x2="6"  y2="18"/>
+        <line x1="6"  y1="6"  x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <!-- 轮播区域 -->
+    <div class="modal-slider" id="modalSlider">
+      <div class="modal-slider-track" id="modalSliderTrack"></div>
+
+      <!-- 左右箭头 -->
+      <button class="slider-btn slider-btn--prev" id="sliderPrev" aria-label="Previous image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <button class="slider-btn slider-btn--next" id="sliderNext" aria-label="Next image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+
+      <!-- 底部圆点 -->
+      <div class="slider-dots" id="sliderDots"></div>
+    </div>
+
+    <div class="modal-body">
+      <span class="modal-tag" id="modalTag"></span>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <p class="modal-desc" id="modalDesc"></p>
+    </div>
+  </div>
+</div>
 
   <script src="js/main.js"></script>
 </body>

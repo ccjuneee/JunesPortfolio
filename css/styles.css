@@ -9,8 +9,8 @@
   --bg-color:        #0f172a;
   --card-color:      #111827;
   --surface:         #1a2236;
-  --accent-color:    #6366f1;
-  --accent-hover:    #818cf8;
+  --accent-color:    #f15722;
+  --accent-hover:    #ff9966;
   --accent-glow:     rgba(99, 102, 241, 0.18);
   --text-primary:    #f9fafb;
   --text-secondary:  #9ca3af;
@@ -42,6 +42,24 @@
   --ease-out:        cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* ---- LIGHT MODE TOKENS ---- */
+/* Applied when <html data-theme="light"> is set by JS */
+[data-theme="light"] {
+  --bg-color:       #f8f9fc;
+  --card-color:     #ffffff;
+  --surface:        #ffcc99;
+  --accent-color:   #f15722;
+  --accent-hover:   #ff9966;
+  --accent-glow:    rgba(79, 70, 229, 0.12);
+  --text-primary:   #0f172a;
+  --text-secondary: #4b5563;
+  --border:         rgba(0, 0, 0, 0.08);
+}
+/* Scrolled navbar gets a light glass in light mode */
+[data-theme="light"] .navbar.scrolled {
+  background: rgba(248, 249, 252, 0.82);
+}
+
 /* ---- RESET ---- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding-top: var(--nav-height); }
@@ -53,23 +71,91 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  transition: background 0.35s var(--ease-out), color 0.35s var(--ease-out);
 }
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 
-/* ---- CURSOR GLOW ---- */
+/* ---- CUSTOM CURSOR ---- */
+/* Hide system cursor site-wide on non-touch devices */
+@media (pointer: fine) {
+  html, body, a, button, [role="button"], input, label, select, textarea {
+    cursor: none !important;
+  }
+}
+
+/* --- Dot: snaps directly to mouse position --- */
+.cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  transition: width 0.2s var(--ease-out),
+              height 0.2s var(--ease-out),
+              background 0.2s,
+              opacity 0.3s;
+  will-change: left, top;
+}
+
+/* --- Ring: larger hollow circle, lags behind via JS lerp --- */
+.cursor-ring {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent-color);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9998;
+  opacity: 0.5;
+  transition: width 0.3s var(--ease-out),
+              height 0.3s var(--ease-out),
+              border-color 0.2s,
+              opacity 0.3s;
+  will-change: left, top;
+}
+
+/* --- Hover state: both elements expand and brighten --- */
+.cursor-dot.is-hovering {
+  width: 12px;
+  height: 12px;
+  background: var(--accent-hover);
+}
+.cursor-ring.is-hovering {
+  width: 52px;
+  height: 52px;
+  border-color: var(--accent-hover);
+  opacity: 0.7;
+}
+
+/* --- Cursor hidden when over text inputs --- */
+.cursor-dot.is-text,
+.cursor-ring.is-text {
+  opacity: 0;
+}
+
+/* --- Ambient glow: the existing large background bloom --- */
 .cursor-glow {
   position: fixed;
   width: 420px;
   height: 420px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.13) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
   pointer-events: none;
   transform: translate(-50%, -50%);
   z-index: 0;
-  transition: opacity 0.3s;
-  will-change: transform;
+  transition: opacity 0.4s;
+  will-change: left, top;
+}
+
+/* --- Hide all cursor layers on touch devices --- */
+@media (pointer: coarse) {
+  .cursor-dot, .cursor-ring, .cursor-glow { display: none; }
 }
 
 /* ---- CONTAINER ---- */
@@ -105,13 +191,18 @@ ul { list-style: none; }
   justify-content: space-between;
 }
 .nav-logo {
-  font-family: var(--font-heading);
-  font-weight: 800;
-  font-size: 1.35rem;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
-.dot { color: var(--accent-color); }
+.nav-logo__img {
+  height: 28px;       /* 根据实际 SVG 比例调整 */
+  width: auto;
+  display: block;
+  transition: opacity 0.2s;
+}
+
+
 .nav-links {
   display: flex;
   gap: clamp(24px, 3vw, 42px);
@@ -158,6 +249,45 @@ ul { list-style: none; }
 .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
 .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ---- NAV CONTROLS (theme toggle + hamburger wrapper) ---- */
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---- THEME TOGGLE BUTTON ---- */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.25s, border-color 0.25s, background 0.25s, transform 0.25s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-color);
+  background: var(--accent-glow);
+  transform: rotate(15deg);
+}
+.theme-toggle svg {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+/* Show moon in dark mode, sun in light mode */
+.icon-sun  { display: none; }
+.icon-moon { display: block; }
+[data-theme="light"] .icon-sun  { display: block; }
+[data-theme="light"] .icon-moon { display: none; }
 
 /* ---- HERO ---- */
 .hero {
@@ -246,9 +376,9 @@ ul { list-style: none; }
   background: linear-gradient(
     110deg,
     var(--accent-hover) 0%,
-    #a5b4fc           30%,
+    #ff9966           30%,
     var(--accent-color) 55%,
-    #c7d2fe           75%,
+    #ffcc99           75%,
     var(--accent-hover) 100%
   );
   background-size: 220% auto;
@@ -387,8 +517,8 @@ ul { list-style: none; }
   background: conic-gradient(
     from var(--angle, 0deg),
     var(--accent-color),
-    #a5b4fc,
-    #c7d2fe,
+    #ff9966,
+    #ffcc99,
     var(--accent-color)
   );
   animation: rotateBorder 6s linear infinite;
@@ -832,6 +962,201 @@ ul { list-style: none; }
   transform: translateY(0);
 }
 
+/* ---- PROJECT MODAL ---- */
+
+/* Backdrop: full-screen dark overlay */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(5, 8, 18, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 48px);
+  /* Open/close state driven by .is-open class */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease-out);
+}
+.modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Panel: the white/dark card that slides up */
+.modal-panel {
+  position: relative;
+  background: var(--card-color);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  transform: translateY(32px) scale(0.97);
+  transition: transform 0.4s var(--ease-out);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+  /* Smooth scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.modal-backdrop.is-open .modal-panel {
+  transform: translateY(0) scale(1);
+}
+
+/* Close button */
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-color);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+.modal-close:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent-color);
+  color: var(--text-primary);
+  transform: rotate(90deg);
+}
+.modal-close svg { width: 16px; height: 16px; pointer-events: none; }
+
+/* ---- MODAL SLIDER ---- */
+.modal-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--surface);
+  max-height: 520px;
+  aspect-ratio: 16 / 9;
+  background: #0a0a0a;
+}
+
+.modal-slider-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.modal-slider-track img,
+.modal-slider-track video {
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* 左右箭头按钮 */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-color);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.2s, background 0.2s, transform 0.2s;
+}
+.slider-btn:hover {
+  opacity: 1;
+  background: var(--accent-color);
+  color: #fff;
+}
+.slider-btn--prev { left: 12px; }
+.slider-btn--next { right: 12px; }
+.slider-btn svg   { width: 18px; height: 18px; pointer-events: none; }
+
+/* 只有一张图时隐藏箭头 */
+.modal-slider.single .slider-btn,
+.modal-slider.single .slider-dots {
+  display: none;
+}
+
+/* 圆点指示器 */
+.slider-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+.slider-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  border: none;
+  padding: 0;
+}
+.slider-dot.active {
+  background: #fff;
+  transform: scale(1.35);
+}
+
+/* Text body */
+.modal-body {
+  padding: clamp(24px, 4vw, 40px);
+}
+.modal-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.modal-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+.modal-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* Lock page scroll while modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+
 /* ---- RESPONSIVE ---- */
 @media (max-width: 900px) {
   .about-grid {
@@ -853,11 +1178,15 @@ ul { list-style: none; }
     top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(10, 14, 26, 0.97);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 40px;
     z-index: 150;
+  }
+  [data-theme="light"] .nav-links {
+    background: rgba(248, 249, 252, 0.97);
   }
   .nav-links.open { display: flex; }
   .nav-links a { font-size: 1.6rem; color: var(--text-primary); }

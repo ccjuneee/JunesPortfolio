@@ -1,19 +1,113 @@
 /* ============================================
-   ALEX RIVERA — PORTFOLIO
+   JUN CHENG — PORTFOLIO
    main.js
    ============================================ */
 
 'use strict';
 
-/* ---- CURSOR GLOW ---- */
+/* ---- THEME TOGGLE (runs first to avoid flash of wrong theme) ---- */
+const themeToggle = document.getElementById('themeToggle');
+const STORAGE_KEY  = 'jc-portfolio-theme';
+
+// Apply saved theme immediately — before paint
+function updateToggleLabel(theme) {
+  themeToggle.setAttribute(
+    'aria-label',
+    theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'
+  );
+}
+function updateLogo(theme) {
+  document.querySelectorAll('.nav-logo__img').forEach((img) => {
+    img.src = theme === 'light'
+      ? './assets/images/Logo_Light.png'    // light模式 → 深色logo
+      : './assets/images/Logo_Dark.png';  // dark模式 → 浅色logo
+  });
+}
+
+const savedTheme = localStorage.getItem(STORAGE_KEY);
+if (savedTheme) {
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateToggleLabel(savedTheme);
+  updateLogo(savedTheme);
+}
+
+themeToggle.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next    = current === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem(STORAGE_KEY, next);
+  updateToggleLabel(next);
+  updateLogo(next);
+});
+/* ---- CUSTOM CURSOR ---- */
+const cursorDot  = document.getElementById('cursorDot');
+const cursorRing = document.getElementById('cursorRing');
 const cursorGlow = document.getElementById('cursorGlow');
 
+// Current mouse position (dot snaps here instantly)
+let mouseX = -100, mouseY = -100;
+// Ring position (lerps toward mouse each frame)
+let ringX  = -100, ringY  = -100;
+
+// Move dot and glow to exact mouse position immediately
 document.addEventListener('mousemove', (e) => {
-  cursorGlow.style.left = e.clientX + 'px';
-  cursorGlow.style.top  = e.clientY + 'px';
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursorDot.style.left  = mouseX + 'px';
+  cursorDot.style.top   = mouseY + 'px';
+  cursorGlow.style.left = mouseX + 'px';
+  cursorGlow.style.top  = mouseY + 'px';
 });
-document.addEventListener('mouseleave', () => { cursorGlow.style.opacity = '0'; });
-document.addEventListener('mouseenter', () => { cursorGlow.style.opacity = '1'; });
+
+// Ring follows with lerp each animation frame — creates the lag effect
+function animateRing() {
+  // Lerp factor: 0.12 = slow/smooth, 0.2 = snappier
+  ringX += (mouseX - ringX) * 0.14;
+  ringY += (mouseY - ringY) * 0.14;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top  = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+requestAnimationFrame(animateRing);
+
+// Hide all layers when cursor leaves the window
+document.addEventListener('mouseleave', () => {
+  cursorDot.style.opacity  = '0';
+  cursorRing.style.opacity = '0';
+  cursorGlow.style.opacity = '0';
+});
+document.addEventListener('mouseenter', () => {
+  cursorDot.style.opacity  = '1';
+  cursorRing.style.opacity = '0.5';
+  cursorGlow.style.opacity = '1';
+});
+
+// Hover detection: scale up on interactive elements
+const interactiveSelector = 'a, button, [role="button"], input, textarea, select, label, .project-card, .skill-tag, .social-link';
+const textSelector        = 'input[type="text"], input[type="email"], textarea';
+
+document.querySelectorAll(interactiveSelector).forEach((el) => {
+  el.addEventListener('mouseenter', () => {
+    cursorDot.classList.add('is-hovering');
+    cursorRing.classList.add('is-hovering');
+  });
+  el.addEventListener('mouseleave', () => {
+    cursorDot.classList.remove('is-hovering');
+    cursorRing.classList.remove('is-hovering');
+  });
+});
+
+// Hide cursor over text inputs (browser shows text I-beam instead)
+document.querySelectorAll(textSelector).forEach((el) => {
+  el.addEventListener('mouseenter', () => {
+    cursorDot.classList.add('is-text');
+    cursorRing.classList.add('is-text');
+  });
+  el.addEventListener('mouseleave', () => {
+    cursorDot.classList.remove('is-text');
+    cursorRing.classList.remove('is-text');
+  });
+});
 
 
 /* ---- NAVBAR SCROLL STATE ---- */
@@ -136,4 +230,152 @@ document.querySelectorAll('.stagger-grid').forEach((grid) => {
     child.classList.add('animate-on-scroll');
     animateObserver.observe(child);
   });
+});
+
+
+/* ---- PROJECT MODAL ---- */
+const modalBackdrop   = document.getElementById('modalBackdrop');
+const modalClose      = document.getElementById('modalClose');
+const modalTag        = document.getElementById('modalTag');
+const modalTitle      = document.getElementById('modalTitle');
+const modalDesc       = document.getElementById('modalDesc');
+const modalSlider     = document.getElementById('modalSlider');
+const sliderTrack     = document.getElementById('modalSliderTrack');
+const sliderDots      = document.getElementById('sliderDots');
+const sliderPrev      = document.getElementById('sliderPrev');
+const sliderNext      = document.getElementById('sliderNext');
+
+let currentIndex = 0;
+let totalSlides  = 0;
+
+// 跳到指定索引
+function goToSlide(index) {
+  currentIndex = (index + totalSlides) % totalSlides;
+  sliderTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+  // 暂停所有视频，播放当前的
+  sliderTrack.querySelectorAll('video').forEach((v, i) => {
+    if (i === currentIndex) {
+      v.play().catch(() => {});   // 自动播放（静音状态）
+    } else {
+      v.pause();
+    }
+  });
+
+  // 更新圆点
+  sliderDots.querySelectorAll('.slider-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentIndex);
+  });
+}
+
+// 打开 modal，解析多图数据
+function openModal(card) {
+  const imgs  = (card.dataset.modalImgs || '').split('|').map(s => s.trim()).filter(Boolean);
+  totalSlides = imgs.length;
+  currentIndex = 0;
+
+  // 清空 track 和 dots
+  sliderTrack.innerHTML = '';
+  sliderDots.innerHTML  = '';
+
+ // 渲染图片或视频
+imgs.forEach((src, i) => {
+  const isVideo = /\.(mp4|mov|webm|ogg)$/i.test(src);
+  let   media;
+
+  if (isVideo) {
+    media = document.createElement('video');
+    media.src      = src;
+    media.controls = true;
+    media.muted    = true;       // 静音自动播放，用户可手动开声音
+    media.loop     = true;
+    media.playsInline = true;
+    media.preload  = i === 0 ? 'auto' : 'none';
+  } else {
+    media = document.createElement('img');
+    media.src     = src;
+    media.alt     = card.dataset.modalTitle || '';
+    media.loading = i === 0 ? 'eager' : 'lazy';
+  }
+
+  sliderTrack.appendChild(media);
+
+  // 渲染圆点
+  const dot = document.createElement('button');
+  dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+  dot.setAttribute('aria-label', `Go to image ${i + 1}`);
+  dot.addEventListener('click', () => goToSlide(i));
+  sliderDots.appendChild(dot);
+});
+
+  // 单图时隐藏控件
+  modalSlider.classList.toggle('single', totalSlides <= 1);
+
+  // 重置位置
+  sliderTrack.style.transform = 'translateX(0)';
+
+  // 填充文字
+  modalTag.textContent   = card.dataset.modalTag   || '';
+  modalTitle.textContent = card.dataset.modalTitle || '';
+  modalDesc.textContent  = card.dataset.modalDesc  || '';
+
+  // 打开
+  modalBackdrop.hidden = false;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      modalBackdrop.classList.add('is-open');
+    });
+  });
+  document.body.classList.add('modal-open');
+  modalClose.focus();
+}
+
+// 关闭
+function closeModal() {
+  modalBackdrop.classList.remove('is-open');
+  document.body.classList.remove('modal-open');
+  modalBackdrop.addEventListener('transitionend', () => {
+    modalBackdrop.hidden = true;
+  }, { once: true });
+}
+
+// 箭头点击
+sliderPrev.addEventListener('click', () => goToSlide(currentIndex - 1));
+sliderNext.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+// 键盘左右切换
+document.addEventListener('keydown', (e) => {
+  if (!modalBackdrop.classList.contains('is-open')) return;
+  if (e.key === 'ArrowLeft')  goToSlide(currentIndex - 1);
+  if (e.key === 'ArrowRight') goToSlide(currentIndex + 1);
+  if (e.key === 'Escape')     closeModal();
+});
+
+// 触摸滑动支持
+let touchStartX = 0;
+modalSlider.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+}, { passive: true });
+modalSlider.addEventListener('touchend', (e) => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 40) goToSlide(currentIndex + (diff > 0 ? 1 : -1));
+}, { passive: true });
+
+// 绑定卡片点击
+document.querySelectorAll('.project-card').forEach((card) => {
+  card.addEventListener('click', () => openModal(card));
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('role', 'button');
+  card.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openModal(card);
+    }
+  });
+});
+
+// 关闭方式
+modalClose.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', (e) => {
+  if (e.target === modalBackdrop) closeModal();
 });
