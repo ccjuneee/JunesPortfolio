@@ -1035,6 +1035,345 @@ ul { list-style: none; }
 }
 .modal-close svg { width: 16px; height: 16px; pointer-events: none; }
 
+/* ======================================
+   WORK UNIVERSE
+   ====================================== */
+
+.work-universe {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.work-intro {
+  text-align: center;
+  margin-bottom: clamp(48px, 8vw, 80px);
+  position: relative;
+  z-index: 2;
+}
+
+/* ---- 漂浮标签场 ---- */
+.work-tags-field {
+  position: relative;
+  width: 100%;
+  height: clamp(340px, 55vh, 520px);
+  transition: opacity 0.5s var(--ease-out);
+}
+
+.work-tag {
+  position: absolute;
+  left: var(--tx);
+  top:  var(--ty);
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 4px;
+  opacity: 0.35;
+  /* 浮动动画 */
+  animation: tag-float 4s ease-in-out infinite;
+  animation-delay: var(--delay);
+  /* 磁吸偏移量 */
+  transform: translate(var(--mx, 0px), var(--my, 0px));
+  transition:
+    opacity   0.4s var(--ease-out),
+    color     0.4s var(--ease-out),
+    filter    0.4s var(--ease-out),
+    transform 0.6s var(--ease-out),
+    font-size 0.4s var(--ease-out);
+  will-change: transform;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+@keyframes tag-float {
+  0%, 100% { translate: 0 0px;   }
+  50%       { translate: 0 -12px; }
+}
+
+/* 整体 dimmed 状态（有 tag 被 hover 时） */
+.work-tags-field.has-hover .work-tag {
+  opacity: 0.12;
+  filter: blur(1px);
+}
+
+/* 被 hover 的那个标签 */
+.work-tags-field.has-hover .work-tag:hover,
+.work-tag.is-active {
+  opacity: 1;
+  color: var(--accent-color);
+  filter: none;
+  animation-play-state: paused;
+}
+
+/* ---- 作品展示舞台 ---- */
+.work-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(24px, 4vh, 40px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  z-index: 10;
+}
+
+.work-stage.is-open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+/* 舞台顶部标题行 */
+.work-stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 900px;
+  padding: 0 16px;
+}
+
+.work-stage-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-heading);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.work-stage-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  flex-shrink: 0;
+  animation: pulse-dot 2s ease-out infinite;
+}
+
+.work-stage-close {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-color);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.3s var(--ease-out);
+}
+
+.work-stage-close:hover {
+  background: var(--accent-color);
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+.work-stage-close svg { width: 15px; height: 15px; pointer-events: none; }
+
+/* 整个轮播容器加透视 */
+.work-carousel-wrap {
+  perspective: 1000px;
+}
+
+.work-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;               /* 间距靠 margin 控制，让卡片可以叠压 */
+  width: 100%;
+  overflow: visible;
+}
+
+/* 所有卡片默认：缩小 + 向后 + 倾斜 */
+.work-carousel-item {
+  flex-shrink: 0;
+  width: clamp(200px, 30vw, 340px);
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  position: relative;
+  margin: 0 -40px;          /* 负 margin 让卡片相互叠压 */
+  transform: scale(0.65) rotateY(35deg) translateZ(-60px);
+  opacity: 0.4;
+  filter: brightness(0.55);
+  transition:
+    transform  0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity    0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    filter     0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s;
+  will-change: transform, opacity;
+  z-index: 1;
+}
+
+/* 左侧卡片：向左倾斜 */
+.work-carousel-item.is-left {
+  transform: scale(0.65) rotateY(35deg) translateZ(-60px);
+  transform-origin: right center;
+}
+
+/* 右侧卡片：向右倾斜 */
+.work-carousel-item.is-right {
+  transform: scale(0.65) rotateY(-35deg) translateZ(-60px);
+  transform-origin: left center;
+}
+
+/* 中心主角：正面、最大、最亮 */
+.work-carousel-item.is-center {
+  transform: scale(1) rotateY(0deg) translateZ(0);
+  opacity: 1;
+  filter: brightness(1);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+  z-index: 10;
+  cursor: default;
+}
+
+.work-carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 点击中心卡片打开 modal 的提示 */
+.work-carousel-item.is-center::after {
+  content: 'Click to view ↗';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(10,14,26,0.95) 0%, transparent 100%);
+  color: var(--accent-hover);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.work-carousel-item.is-center:hover::after {
+  opacity: 1;
+}
+
+/* 箭头按钮 */
+.work-carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-color);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.work-carousel-btn:hover {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #fff;
+}
+
+.work-carousel-btn--prev { left: -24px; }
+.work-carousel-btn--next { right: -24px; }
+.work-carousel-btn svg   { width: 20px; height: 20px; pointer-events: none; }
+
+/* 作品信息 */
+.work-stage-info {
+  text-align: center;
+  max-width: 480px;
+  min-height: 90px;
+}
+
+.work-stage-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.work-stage-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.work-stage-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  max-width: none;
+}
+
+.work-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  margin-top: 6px;
+  max-width: none;
+}
+
+.work-hint-icon {
+  font-size: 1rem;
+  color: var(--accent-color);
+  animation: hint-bounce 2s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes hint-bounce {
+  0%, 100% { transform: translate(0, 0);    }
+  50%       { transform: translate(3px, -3px); }
+}
+
+/* ---- 响应式 ---- */
+@media (max-width: 768px) {
+  .work-tag { font-size: clamp(1.3rem, 6vw, 2rem); }
+
+  .work-carousel-item {
+    width: clamp(140px, 38vw, 220px);
+  }
+
+  .work-carousel-btn--prev { left: 0; }
+  .work-carousel-btn--next { right: 0; }
+}
+
 /* ---- MODAL SLIDER ---- */
 .modal-slider {
   position: relative;

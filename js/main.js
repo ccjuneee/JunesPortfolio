@@ -232,6 +232,161 @@ document.querySelectorAll('.stagger-grid').forEach((grid) => {
   });
 });
 
+/* ---- WORK UNIVERSE ---- */
+const workTagsField  = document.getElementById('workTagsField');
+const workStage      = document.getElementById('workStage');
+const workStageClose = document.getElementById('workStageClose');
+const stageTitle     = document.getElementById('stageTitle');
+const stageTag       = document.getElementById('stageTag');
+const stageProjTitle = document.getElementById('stageProjTitle');
+const stageProjDesc  = document.getElementById('stageProjDesc');
+const workCarousel   = document.getElementById('workCarousel');
+const carouselPrev   = document.getElementById('carouselPrev');
+const carouselNext   = document.getElementById('carouselNext');
+const workData       = document.getElementById('workData');
+
+let carouselItems  = [];
+let carouselIndex  = 0;
+let activeCategory = null;
+
+// ── 磁吸效果 ──
+document.querySelectorAll('.work-tag').forEach((tag) => {
+  tag.addEventListener('mousemove', (e) => {
+    const rect   = tag.getBoundingClientRect();
+    const cx     = rect.left + rect.width  / 2;
+    const cy     = rect.top  + rect.height / 2;
+    const dx     = (e.clientX - cx) * 0.28;
+    const dy     = (e.clientY - cy) * 0.28;
+    tag.style.setProperty('--mx', dx + 'px');
+    tag.style.setProperty('--my', dy + 'px');
+  });
+
+  tag.addEventListener('mouseleave', () => {
+    tag.style.setProperty('--mx', '0px');
+    tag.style.setProperty('--my', '0px');
+  });
+
+  // hover 整体 dim
+  tag.addEventListener('mouseenter', () => {
+    workTagsField.classList.add('has-hover');
+  });
+  tag.addEventListener('mouseleave', () => {
+    workTagsField.classList.remove('has-hover');
+  });
+});
+
+// ── 轮播渲染 ──
+function buildCarousel(category) {
+  const dataEl = workData.querySelector(`[data-category="${category}"]`);
+  if (!dataEl) return;
+
+  carouselItems = Array.from(dataEl.querySelectorAll('article'));
+  carouselIndex = 0;
+  workCarousel.innerHTML = '';
+
+  carouselItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'work-carousel-item' + (i === 0 ? ' is-center' : '');
+    div.dataset.index = i;
+
+    const img = document.createElement('img');
+    img.src     = item.dataset.thumb || '';
+    img.alt     = item.dataset.modalTitle || '';
+    img.loading = i === 0 ? 'eager' : 'lazy';
+    div.appendChild(img);
+
+    // 点击非中心 → 跳到那张
+    div.addEventListener('click', () => {
+      if (!div.classList.contains('is-center')) {
+        goCarousel(i);
+      } else {
+        // 点击中心 → 开 modal
+        openModal(item);
+      }
+    });
+
+    workCarousel.appendChild(div);
+  });
+
+  updateCarouselInfo();
+}
+
+function goCarousel(index) {
+  carouselIndex = (index + carouselItems.length) % carouselItems.length;
+
+  workCarousel.querySelectorAll('.work-carousel-item').forEach((el, i) => {
+    el.classList.toggle('is-center', i === carouselIndex);
+  });
+
+  updateCarouselInfo();
+}
+
+function updateCarouselInfo() {
+  const current = carouselItems[carouselIndex];
+  if (!current) return;
+  stageTag.textContent       = current.dataset.modalTag   || '';
+  stageProjTitle.textContent = current.dataset.modalTitle || '';
+  stageProjDesc.textContent  = current.dataset.modalDesc  || '';
+}
+
+// ── 打开分类 ──
+document.querySelectorAll('.work-tag').forEach((tag) => {
+  tag.addEventListener('click', () => {
+    const category = tag.dataset.category;
+    activeCategory = category;
+
+    // 标签名填入舞台标题
+    stageTitle.textContent = tag.textContent.trim();
+
+    // 渲染轮播
+    buildCarousel(category);
+
+    // 标签场隐藏，舞台展开
+    workTagsField.style.opacity        = '0';
+    workTagsField.style.pointerEvents  = 'none';
+    workStage.hidden = false;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        workStage.classList.add('is-open');
+      });
+    });
+  });
+});
+
+// ── 关闭舞台 ──
+function closeStage() {
+  workStage.classList.remove('is-open');
+  workTagsField.style.opacity       = '1';
+  workTagsField.style.pointerEvents = '';
+  activeCategory = null;
+  workStage.addEventListener('transitionend', () => {
+    workStage.hidden = true;
+  }, { once: true });
+}
+
+workStageClose.addEventListener('click', closeStage);
+
+// 箭头
+carouselPrev.addEventListener('click', () => goCarousel(carouselIndex - 1));
+carouselNext.addEventListener('click', () => goCarousel(carouselIndex + 1));
+
+// 键盘
+document.addEventListener('keydown', (e) => {
+  if (!workStage.classList.contains('is-open')) return;
+  if (e.key === 'ArrowLeft')  goCarousel(carouselIndex - 1);
+  if (e.key === 'ArrowRight') goCarousel(carouselIndex + 1);
+  if (e.key === 'Escape')     closeStage();
+});
+
+// 触摸滑动
+let wTouchX = 0;
+workCarousel.addEventListener('touchstart', (e) => {
+  wTouchX = e.touches[0].clientX;
+}, { passive: true });
+workCarousel.addEventListener('touchend', (e) => {
+  const diff = wTouchX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 40) goCarousel(carouselIndex + (diff > 0 ? 1 : -1));
+}, { passive: true });
 
 /* ---- PROJECT MODAL ---- */
 const modalBackdrop   = document.getElementById('modalBackdrop');
