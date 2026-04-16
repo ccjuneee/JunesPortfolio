@@ -865,7 +865,7 @@ ul { list-style: none; }
 
 /* ---- CONTACT FORM ---- */
 .contact-form {
-  width: 90%;
+  width: 100%;
   max-width: 560px;
   margin: 0 auto 0;
   text-align: left;
