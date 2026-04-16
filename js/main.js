@@ -614,7 +614,7 @@ if (contactForm) {
     if (!valid) return;
 
     // 通过验证 — 显示成功提示，重置表单
-    // 注意：这里只是前端展示，实际发送邮件需要后端或 Formspree 服务
+    // 注意：这里是前端展示，实际发送邮件需要后端或 Formspree 服务
     const successMsg = document.getElementById('formSuccess');
     successMsg.hidden = false;
     contactForm.reset();
