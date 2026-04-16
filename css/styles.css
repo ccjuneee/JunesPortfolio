@@ -863,6 +863,120 @@ ul { list-style: none; }
   box-shadow: 0 6px 20px rgba(165, 180, 252, 0.2);
 }
 
+/* ---- CONTACT FORM ---- */
+.contact-form {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto 0;
+  text-align: left;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.required {
+  color: var(--accent-color);
+  margin-left: 2px;
+}
+
+.optional {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  margin-left: 6px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.form-group input,
+.form-group textarea {
+  background: var(--card-color);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 13px 16px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  width: 100%;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  resize: none;
+  outline: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.45;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* 验证错误状态 */
+.form-group input.is-error,
+.form-group textarea.is-error {
+  border-color: #f87171;
+}
+
+.field-error {
+  font-size: 0.75rem;
+  color: #f87171;
+  display: none;
+}
+
+.field-error.show {
+  display: block;
+}
+
+.form-submit {
+  width: 100%;
+  margin-top: 8px;
+  justify-content: center;
+}
+
+.form-success {
+  margin-top: 16px;
+  text-align: center;
+  color: #4ade80;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* WeChat hover — 绿色调 */
+.social-link--wechat:hover {
+  border-color: #07c160;
+  background: rgba(7, 193, 96, 0.08);
+  box-shadow: 0 6px 20px rgba(7, 193, 96, 0.15);
+}
+
+/* 响应式：手机单列 */
+@media (max-width: 560px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---- FOOTER ---- */
 .footer {
   padding: 32px 0;
@@ -1045,13 +1159,14 @@ ul { list-style: none; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;   /* 从顶部开始，不再居中 */
+  padding-top: clamp(20px, 4vh, 48px);  /* 少量顶部留白 */
   overflow: hidden;
 }
 
 .work-intro {
   text-align: center;
-  margin-bottom: clamp(48px, 8vw, 80px);
+  margin-bottom: clamp(24px, 4vw, 40px);  /* 减少底部间距 */
   position: relative;
   z-index: 2;
 }
@@ -1060,7 +1175,7 @@ ul { list-style: none; }
 .work-tags-field {
   position: relative;
   width: 100%;
-  height: clamp(340px, 55vh, 520px);
+  height: clamp(300px, 48vh, 460px);   /* 略微收紧高度 */
   transition: opacity 0.5s var(--ease-out);
 }
 
@@ -1121,8 +1236,9 @@ ul { list-style: none; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: clamp(24px, 4vh, 40px);
+  justify-content: flex-start;         /* 从顶部开始 */
+  padding-top: clamp(60px, 8vh, 100px); /* 顶部留出标题区空间 */
+  gap: clamp(16px, 3vh, 28px);         /* 元素间距收紧 */
   opacity: 0;
   pointer-events: none;
   transform: translateY(20px);
@@ -1190,59 +1306,69 @@ ul { list-style: none; }
 
 /* 整个轮播容器加透视 */
 .work-carousel-wrap {
-  perspective: 1000px;
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  perspective: 1200px;
 }
 
+/* 轮播主体 — 改用相对定位作为绝对定位的基准 */
 .work-carousel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;               /* 间距靠 margin 控制，让卡片可以叠压 */
+  position: relative;
   width: 100%;
+  height: clamp(240px, 36vw, 420px);  /* 固定高度，卡片绝对定位在里面 */
   overflow: visible;
 }
 
-/* 所有卡片默认：缩小 + 向后 + 倾斜 */
+/* 所有卡片：绝对定位，居中叠放，互不挤压 */
 .work-carousel-item {
-  flex-shrink: 0;
-  width: clamp(200px, 30vw, 340px);
-  aspect-ratio: 4 / 3;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: clamp(280px, 40vw, 500px);
+  height: 100%;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  cursor: pointer;
   border: 1px solid var(--border);
-  position: relative;
-  margin: 0 -40px;          /* 负 margin 让卡片相互叠压 */
-  transform: scale(0.65) rotateY(35deg) translateZ(-60px);
-  opacity: 0.4;
-  filter: brightness(0.55);
+  cursor: pointer;
+  /* 默认状态：缩小退后，左右卡片的起点 */
+  transform: translateX(-50%) scale(0.62) rotateY(0deg);
+  opacity: 0.35;
+  filter: brightness(0.5);
+  z-index: 1;
   transition:
     transform  0.55s cubic-bezier(0.16, 1, 0.3, 1),
     opacity    0.55s cubic-bezier(0.16, 1, 0.3, 1),
     filter     0.55s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.4s;
   will-change: transform, opacity;
-  z-index: 1;
 }
 
-/* 左侧卡片：向左倾斜 */
+/* 左侧卡片：向左移 + 向后倾斜 */
 .work-carousel-item.is-left {
-  transform: scale(0.65) rotateY(35deg) translateZ(-60px);
-  transform-origin: right center;
+  transform: translateX(calc(-50% - 52%)) scale(0.65) rotateY(22deg);
+  transform-origin: center center;
+  opacity: 0.5;
+  filter: brightness(0.6);
+  z-index: 2;
 }
 
-/* 右侧卡片：向右倾斜 */
+/* 右侧卡片：向右移 + 向后倾斜 */
 .work-carousel-item.is-right {
-  transform: scale(0.65) rotateY(-35deg) translateZ(-60px);
-  transform-origin: left center;
+  transform: translateX(calc(-50% + 52%)) scale(0.65) rotateY(-22deg);
+  transform-origin: center center;
+  opacity: 0.5;
+  filter: brightness(0.6);
+  z-index: 2;
 }
 
-/* 中心主角：正面、最大、最亮 */
+/* 中心主角：正面、最大、最亮、最高层 */
 .work-carousel-item.is-center {
-  transform: scale(1) rotateY(0deg) translateZ(0);
+  transform: translateX(-50%) scale(1) rotateY(0deg);
   opacity: 1;
   filter: brightness(1);
-  box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.55);
   z-index: 10;
   cursor: default;
 }
@@ -1256,7 +1382,7 @@ ul { list-style: none; }
   transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* 点击中心卡片打开 modal 的提示 */
+/* 中心卡片 hover 提示 */
 .work-carousel-item.is-center::after {
   content: 'Click to view ↗';
   position: absolute;

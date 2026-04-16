@@ -247,6 +247,7 @@ const workData       = document.getElementById('workData');
 
 let carouselItems  = [];
 let carouselIndex  = 0;
+
 let activeCategory = null;
 
 // ── 磁吸效果 ──
@@ -286,7 +287,7 @@ function buildCarousel(category) {
 
   carouselItems.forEach((item, i) => {
     const div = document.createElement('div');
-    div.className = 'work-carousel-item' + (i === 0 ? ' is-center' : '');
+    div.className = 'work-carousel-item';
     div.dataset.index = i;
 
     const img = document.createElement('img');
@@ -295,12 +296,16 @@ function buildCarousel(category) {
     img.loading = i === 0 ? 'eager' : 'lazy';
     div.appendChild(img);
 
-    // 点击非中心 → 跳到那张
-    div.addEventListener('click', () => {
+    // 悬停非中心 → 切换
+    div.addEventListener('mouseenter', () => {
       if (!div.classList.contains('is-center')) {
-        goCarousel(i);
-      } else {
-        // 点击中心 → 开 modal
+        goCarousel(Number(div.dataset.index));
+      }
+    });
+
+    // 点击中心 → 开 modal
+    div.addEventListener('click', () => {
+      if (div.classList.contains('is-center')) {
         openModal(item);
       }
     });
@@ -308,17 +313,43 @@ function buildCarousel(category) {
     workCarousel.appendChild(div);
   });
 
-  updateCarouselInfo();
+  // 初始化状态
+  goCarousel(0);
 }
 
+let isAnimating = false;   // ← 在函数外面加这一行（和 carouselIndex 放在一起）
+
 function goCarousel(index) {
-  carouselIndex = (index + carouselItems.length) % carouselItems.length;
+  if (isAnimating) return;           // 动画中直接忽略
+  const total = carouselItems.length;
+  carouselIndex = (index + total) % total;
 
   workCarousel.querySelectorAll('.work-carousel-item').forEach((el, i) => {
-    el.classList.toggle('is-center', i === carouselIndex);
+    el.classList.remove('is-center', 'is-left', 'is-right');
+    el.style.opacity       = '';
+    el.style.filter        = '';
+    el.style.pointerEvents = '';
+    el.style.zIndex        = '';
+
+    const dist = ((i - carouselIndex + total) % total);
+
+    if (dist === 0) {
+      el.classList.add('is-center');
+    } else if (dist === 1) {
+      el.classList.add('is-right');
+    } else if (dist === total - 1) {
+      el.classList.add('is-left');
+    } else {
+      el.style.opacity       = '0';
+      el.style.pointerEvents = 'none';
+    }
   });
 
   updateCarouselInfo();
+
+  // 锁定，等 CSS transition 结束后解锁（时长和 CSS 的 0.55s 对应）
+  isAnimating = true;
+  setTimeout(() => { isAnimating = false; }, 580);
 }
 
 function updateCarouselInfo() {
@@ -534,3 +565,61 @@ modalClose.addEventListener('click', closeModal);
 modalBackdrop.addEventListener('click', (e) => {
   if (e.target === modalBackdrop) closeModal();
 });
+
+/* ---- CONTACT FORM ---- */
+const contactForm = document.getElementById('contactForm');
+
+if (contactForm) {
+  contactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let valid = true;
+
+    // 验证姓名
+    const name    = document.getElementById('formName');
+    const nameErr = document.getElementById('nameError');
+    if (!name.value.trim()) {
+      name.classList.add('is-error');
+      nameErr.classList.add('show');
+      valid = false;
+    } else {
+      name.classList.remove('is-error');
+      nameErr.classList.remove('show');
+    }
+
+    // 验证邮箱
+    const email    = document.getElementById('formEmail');
+    const emailErr = document.getElementById('emailError');
+    const emailOk  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+    if (!emailOk) {
+      email.classList.add('is-error');
+      emailErr.classList.add('show');
+      valid = false;
+    } else {
+      email.classList.remove('is-error');
+      emailErr.classList.remove('show');
+    }
+
+    // 验证留言
+    const msg    = document.getElementById('formMessage');
+    const msgErr = document.getElementById('messageError');
+    if (!msg.value.trim()) {
+      msg.classList.add('is-error');
+      msgErr.classList.add('show');
+      valid = false;
+    } else {
+      msg.classList.remove('is-error');
+      msgErr.classList.remove('show');
+    }
+
+    if (!valid) return;
+
+    // 通过验证 — 显示成功提示，重置表单
+    // 注意：这里只是前端展示，实际发送邮件需要后端或 Formspree 服务
+    const successMsg = document.getElementById('formSuccess');
+    successMsg.hidden = false;
+    contactForm.reset();
+
+    // 3秒后隐藏成功提示
+    setTimeout(() => { successMsg.hidden = true; }, 3000);
+  });
+}
