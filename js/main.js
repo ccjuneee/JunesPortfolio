@@ -304,11 +304,15 @@ function buildCarousel(category) {
     });
 
     // 点击中心 → 开 modal
-    div.addEventListener('click', () => {
-      if (div.classList.contains('is-center')) {
-        openModal(item);
-      }
-    });
+div.addEventListener('click', () => {
+  if (div.classList.contains('is-center')) {
+    openModal(item);
+  } else {
+    // 非中心：先切换到这张，短暂延迟后打开 modal
+    goCarousel(Number(div.dataset.index));
+    setTimeout(() => openModal(item), 300);
+  }
+});
 
     workCarousel.appendChild(div);
   });
